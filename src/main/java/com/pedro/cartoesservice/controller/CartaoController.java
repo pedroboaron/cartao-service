@@ -23,56 +23,41 @@ public class CartaoController {
     @Autowired
     private CartaoService cartaoService;
 
-//    @Autowired
-//    private CartaoUsuarioService cartaoUsuarioService;
-
     @Autowired
     private ApplicationEventPublisher publisher;
 
     @GetMapping
     public ResponseEntity<List<Cartao>> findByUser(@RequestParam("idUser") Integer idUser) {
-    return ResponseEntity.ok(cartaoService.findByUser(idUser));
+        return ResponseEntity.ok(cartaoService.findByIdUser(idUser));
     }
 
     @PostMapping
-    public ResponseEntity<Cartao> save(@RequestParam("idUser") Integer idUser,
-                                       @Valid @RequestBody Cartao cartao,
+    public ResponseEntity<Cartao> save(@RequestBody Cartao cartao,
                                        HttpServletResponse response) {
-        Cartao save = cartaoService.save(cartao, idUser);
+        Cartao save = cartaoService.save(cartao);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, save.getNumero()));
         return ResponseEntity.status(HttpStatus.CREATED).body(save);
     }
 
     @PutMapping
     public ResponseEntity<Cartao> alterarCartao(@RequestParam("idCartao") Integer idCartao,
-                                                @RequestParam("idUser") Integer idUser,
                                                 @Valid @RequestBody Cartao cartao,
                                                 HttpServletResponse response) throws Exception {
 
-        Cartao save = this.cartaoService.update(idCartao, idUser, cartao);
+        Cartao save = this.cartaoService.update(idCartao, cartao);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, save.getNumero()));
         return ResponseEntity.ok(save);
     }
 
     @PatchMapping
     public ResponseEntity<Cartao> alterarStatus(@RequestParam("idCartao") Integer idCartao,
-                                                @RequestParam("idUser") Integer idUser,
                                                 @RequestParam("ativo") Boolean ativo,
-                                                 HttpServletResponse response) throws Exception {
+                                                HttpServletResponse response) throws Exception {
 
-        Cartao cartao = this.cartaoService.findByIdCartaoAndIdUser(idCartao, idUser);
+        Cartao cartao = this.cartaoService.findById(idCartao);
         cartao.setAtivo(ativo);
-        Cartao save = this.cartaoService.update(idCartao, idUser, cartao);
+        Cartao save = this.cartaoService.update(idCartao, cartao);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, save.getNumero()));
         return ResponseEntity.ok(save);
     }
-
-    @DeleteMapping
-    public ResponseEntity<Void> deleteByNumero(@RequestParam("idCartao") Integer idCartao,
-                                               @RequestParam("idUser") Integer idUser) throws Exception{
-
-        this.cartaoService.deleteByNumero(idUser,this.cartaoService.findByIdCartaoAndIdUser(idCartao, idUser).getId());
-        return ResponseEntity.noContent().build();
-    }
-
 }

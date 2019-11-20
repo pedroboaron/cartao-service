@@ -1,1 +1,4 @@
+com\pedro\cartoesservice\controller\CartoesController.class
 com\pedro\cartoesservice\CartoesServiceApplication.class
+com\pedro\cartoesservice\model\Cartoes.class
+com\pedro\cartoesservice\repository\CartoesRepository.class

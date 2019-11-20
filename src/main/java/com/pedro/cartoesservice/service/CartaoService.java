@@ -1,22 +1,14 @@
 package com.pedro.cartoesservice.service;
 
 import com.pedro.cartoesservice.model.Cartao;
-import com.pedro.cartoesservice.model.Usuario;
 import com.pedro.cartoesservice.repository.CartaoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,38 +20,25 @@ public class CartaoService implements ICartaoService {
     private CartaoRepository cartaoRepository;
 
     @Override
-    public List<Cartao> findAll() {
-        return cartaoRepository.findAll();
-    }
-
-    @Override
-    public Page<Cartao> findAll(Pageable pageable) {
-        return cartaoRepository.findAll(pageable);
-    }
-
-    @Override
-    public Cartao findByIdCartaoAndIdUser(Integer idCartao, Integer idUser) {
-        return cartaoRepository.findByIdCartaoAndIdUser(idCartao,idUser);
+    public Cartao findByNumero(String numero) {
+        return cartaoRepository.findByNumero(numero);
     }
 
     @Transactional
     @Override
-    public void deleteByNumero(Integer idUser, Integer idCartao) throws Exception{
-        cartaoRepository.deleteByNumero(idUser, idCartao);
+    public void deleteByNumero(String numero) {
+        cartaoRepository.deleteByNumero(numero);
+    }
+
+    @Override
+    public Cartao save(Cartao cartao) {
+        return cartaoRepository.save(cartao);
     }
 
     @Transactional
     @Override
-    public Cartao save(Cartao cartao, Integer id_user) {
-        cartao = cartaoRepository.save(cartao);
-        cartaoRepository.cartaoUsuarioSave(cartao.getId(), id_user);
-        return cartao;
-    }
-
-    @Transactional
-    @Override
-    public Cartao update(Integer idCartao, Integer idUser, Cartao cartao) throws Exception {
-        Cartao cartaoSalvo = this.cartaoRepository.findByIdCartaoAndIdUser(idCartao,idUser);
+    public Cartao update(Integer idCartao, Cartao cartao) throws Exception {
+        Cartao cartaoSalvo = this.cartaoRepository.findById(idCartao).get();
 
         if (Objects.isNull(cartaoSalvo)) {
             throw new Exception("Cartão não existe no banco de dados" + idCartao);
@@ -71,11 +50,17 @@ public class CartaoService implements ICartaoService {
     }
 
     @Override
-    public List<Cartao> findByUser(Integer id) {
-        return cartaoRepository.findByUser(id);
+    public List<Cartao> findByIdUser(Integer idUser) {
+        return cartaoRepository.findByIdUser(idUser);
     }
 
     @Override
-    public void cartaoUsuarioSave(Integer idUser, Integer idCartao)  {}
+    public Cartao findById(Integer idCartao) {
+        return cartaoRepository.findById(idCartao).get();
+    }
 
+    @Override
+    public void deleteById(Integer idCartao) {
+
+    }
 }

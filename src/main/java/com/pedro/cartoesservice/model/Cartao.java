@@ -1,19 +1,25 @@
 package com.pedro.cartoesservice.model;
 
-        import javax.persistence.*;
-        import javax.validation.constraints.NotBlank;
-        import javax.validation.constraints.NotNull;
-        import java.time.LocalDate;
-        import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Entity
 public class Cartao {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cartao", nullable = false)
     private Integer id;
+
+    @Column(name = "id_user", nullable = false)
+    @NotNull(message = "O idUser é obrigatório para o cadastro do cartão")
+    private Integer idUser;
 
     @Column(name = "cvv_cartao", nullable = false)
     @NotBlank(message = "O cvv é obrigatório para o cadastro do cartão")
@@ -27,7 +33,7 @@ public class Cartao {
     @NotBlank(message = "O nome é obrigatório para o cadastro do cartão")
     private String nome;
 
-    @Column(name = "numero", nullable = false)
+    @Column(name = "numero", nullable = false, unique = true)
     @NotBlank(message = "O nome é obrigatório para o cadastro do cartão")
     private String numero;
 
@@ -35,7 +41,7 @@ public class Cartao {
     @NotNull(message = "É obrigatório informar se o cartão está ativo ou não para compras")
     private Boolean ativo;
 
-    @Column(name = "cpf_cnpj", nullable = false)
+    @Column(name = "cpf_cnpj", nullable = false, unique = true)
     @NotBlank(message = "É obrigatório informar o cpf ou cnpj relacionado ao cartão")
     private String cpfCnpj;
 
@@ -45,6 +51,14 @@ public class Cartao {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 
     public String getCvv() {
@@ -94,5 +108,4 @@ public class Cartao {
     public void setCpfCnpj(String cpfCnpj) {
         this.cpfCnpj = cpfCnpj;
     }
-
 }
