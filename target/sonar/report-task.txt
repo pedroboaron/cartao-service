@@ -1,0 +1,7 @@
+organization=pedroboaron
+projectKey=pedroboaron_cartao-service
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.2779
+dashboardUrl=https://sonarcloud.io/dashboard?id=pedroboaron_cartao-service
+ceTaskId=AW6GwFccY4NRgh-UhT2i
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AW6GwFccY4NRgh-UhT2i
